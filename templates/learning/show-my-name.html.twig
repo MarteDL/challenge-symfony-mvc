@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block body %}
+    <h1>Hi {{ name }}! Welcome to my first Symfony webpage :-D </h1>
+
+    <p>What is your name?</p>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+
+    <br>
+    <div>
+        <a href="{{ path('about-me')}}">Learn more about me</a>
+    </div>
+{% endblock %}
+
