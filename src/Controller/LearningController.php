@@ -51,18 +51,11 @@ class LearningController extends AbstractController
             $name = $session->get('name');
         }
 
-        $form = $this->createFormBuilder(null, ['method' => 'POST'])
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('change-my-name'))
+            ->setMethod('POST')
             ->add('name', TextType::class)
             ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $name = $data['name'];
-
-            return $this->redirectToRoute('change-my-name', ['name' => $name], 307);
-        }
 
         return $this->render('learning/show-my-name.html.twig', [
             'controller_name' => 'LearningController',
@@ -71,16 +64,25 @@ class LearningController extends AbstractController
         ]);
     }
 
-    #[
-        Route('/learning/change-my-name', name: 'change-my-name', methods: ['POST'])]
+    #[Route('/learning/change-my-name', name: 'change-my-name', methods: ['POST'])]
     public function changeMyName(Request $request): Response
     {
         if(!isset($session)) {
             $session = $request->getSession();
         }
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('change-my-name'))
+            ->setMethod('POST')
+            ->add('name', TextType::class)
+            ->getForm();
 
-        $session->set('name', $request->get('name'));
+        $form->handleRequest($request);
 
-        return $this->redirectToRoute('show-my-name');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $session->set('name', $data['name']);
+
+            return $this->redirectToRoute('show-my-name');
+        }
     }
 }
